@@ -124,27 +124,59 @@
         <p>&copy; 2026 phuotlog84.tv. Created with ❤️ for your journey.</p>
     </footer>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+        import { getFirestore, collection, getDocs, doc, getDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCWwqbO7zNoUT-_NvJ12oPzzrkNJbv_xco",
+            authDomain: "phuotlog.firebaseapp.com",
+            projectId: "phuotlog",
+            storageBucket: "phuotlog.firebasestorage.app",
+            messagingSenderId: "349647181935",
+            appId: "1:349647181935:web:360d32ac7a0ebcb28fd59a"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        document.addEventListener('DOMContentLoaded', async () => {
             const timelineContent = document.getElementById('timeline-content');
             const yearFilter = document.getElementById('yearFilter');
             const tripModal = document.getElementById('tripModal');
             const modalDetailContent = document.getElementById('modalDetailContent');
 
-            // Nạp số liệu thống kê từ Admin
-            const myStats = JSON.parse(localStorage.getItem('myStats')) || { km: "10500", provinces: "35", peaks: "15", years: "4" };
-            const statElements = document.querySelectorAll('.stat-number');
-            if (statElements.length >= 4) {
-                statElements[0].setAttribute('data-target', myStats.km.toString().replace(/,/g, ''));
-                statElements[1].setAttribute('data-target', myStats.provinces);
-                statElements[2].setAttribute('data-target', myStats.peaks);
-                statElements[3].setAttribute('data-target', myStats.years);
-            }
+            // --- NẠP THỐNG KÊ TỪ CLOUD ---
+            try {
+                const statsSnap = await getDoc(doc(db, "settings", "stats"));
+                if (statsSnap.exists()) {
+                    const stats = statsSnap.data();
+                    const statElements = document.querySelectorAll('.stat-number');
+                    if (statElements.length >= 4) {
+                        statElements[0].setAttribute('data-target', (stats.km || "0").replace(/,/g, ''));
+                        statElements[1].setAttribute('data-target', stats.provinces || "0");
+                        statElements[2].setAttribute('data-target', stats.peaks || "0");
+                        statElements[3].setAttribute('data-target', stats.years || "0");
+                        
+                        // Kích hoạt lại hiệu ứng chạy số
+                        startCounters();
+                    }
+                }
+            } catch (e) { console.error("Lỗi nạp stats:", e); }
 
-            let trips = JSON.parse(localStorage.getItem('myTrips')) || [
-                { id: 1, name: "Hà Giang Loop", year: "2023", km: 2500, cost: "8.500.000", route: "Hà Nội → Hà Giang → Quản Bạ → Yên Minh → Đồng Văn → Mèo Vạc", feel: "Hành trình tuyệt vời nhất đời mình.", image: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80", album: [] },
-                { id: 2, name: "Phú Yên - Quy Nhơn", year: "2024", km: 1200, cost: "4.000.000", route: "Tuy Hòa → Đại Lãnh → Gành Đá Đĩa → Quy Nhơn", feel: "Biển xanh vẫy gọi.", image: "https://images.unsplash.com/photo-1506461883276-594a12b11cf3?auto=format&fit=crop&w=800&q=80", album: [] }
-            ];
+            // --- NẠP HÀNH TRÌNH TỪ CLOUD ---
+            let trips = [];
+            async function fetchTrips() {
+                const q = query(collection(db, "trips"), orderBy("year", "desc"));
+                const querySnapshot = await getDocs(q);
+                trips = [];
+                querySnapshot.forEach((doc) => {
+                    trips.push({ id: doc.id, ...doc.data() });
+                });
+                renderTimeline();
+            }
+            fetchTrips();
 
             function renderTimeline(filterYear = 'all') {
                 timelineContent.innerHTML = '';
@@ -155,7 +187,7 @@
                     return;
                 }
 
-                filteredTrips.sort((a, b) => b.year - a.year).forEach((trip, index) => {
+                filteredTrips.forEach((trip, index) => {
                     const isEven = index % 2 !== 0;
                     const block = `
                         <div class="year-block" style="margin-bottom: 8rem;">
@@ -164,7 +196,7 @@
                                 <div class="content-card-wrapper" style="flex: 1; min-width: 300px;">
                                     <div class="content-card">
                                         <button class="like-btn" onclick="toggleLike(event, this)">❤️</button>
-                                        <div onclick="showTripDetail(${trip.id})" style="cursor: pointer;">
+                                        <div onclick="showTripDetail('${trip.id}')" style="cursor: pointer;">
                                             <img src="${trip.image}" style="width: 100%; height: 300px; object-fit: cover;">
                                             <div style="padding: 1.5rem;">
                                                 <h2 style="color: var(--primary-color); margin-bottom: 0.5rem;">${trip.name}</h2>
@@ -179,7 +211,7 @@
                                 <div style="flex: 1; min-width: 300px; text-align: ${isEven ? 'right' : 'left'};">
                                     <h3 style="color: var(--secondary-color); font-size: 1.6rem; margin-bottom: 1rem;">Lộ trình</h3>
                                     <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-muted);">${trip.route || 'Đang cập nhật...'}</p>
-                                    <button class="view-more-btn" onclick="showTripDetail(${trip.id})" style="margin-top: 1.5rem;">XEM NHẬT KÝ 📜</button>
+                                    <button class="view-more-btn" onclick="showTripDetail('${trip.id}')" style="margin-top: 1.5rem;">XEM NHẬT KÝ 📜</button>
                                 </div>
                             </div>
                         </div>
@@ -197,54 +229,40 @@
                 const trip = trips.find(t => t.id === id);
                 if (!trip) return;
 
-                const albumImages = (trip.album || []).map(url => `<img src="${url.trim()}" alt="Album photo">`).join('');
-                const routeSteps = (trip.route || '').split('→').map(step => `<div class="route-step">${step.trim()}</div>`).join('');
-
                 modalDetailContent.innerHTML = `
-                    <div class="journal-container">
-                        <div class="journal-sidebar">
-                            <h1 style="font-size: 2.5rem; color: var(--primary-color); margin-bottom: 1.5rem;">${trip.name}</h1>
-                            <div style="margin-bottom: 2.5rem; padding: 1.5rem; background: rgba(0,0,0,0.2); border-radius: 20px;">
-                                <p style="font-size: 1.1rem; margin-bottom: 0.8rem;">📅 Năm: <strong>${trip.year}</strong></p>
-                                <p style="font-size: 1.1rem; margin-bottom: 0.8rem;">🏍️ Khoảng cách: <strong>${trip.km} KM</strong></p>
-                                <p style="font-size: 1.1rem; color: #feca57;">💸 Chi phí: <strong>${trip.cost || '---'} VNĐ</strong></p>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 3rem;">
+                        <div class="journal-stats">
+                            <h2 style="color: var(--secondary-color); margin-bottom: 1.5rem; font-size: 2.5rem;">${trip.name}</h2>
+                            <div class="stat-badge-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem;">
+                                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 15px;">
+                                    <p style="color: var(--text-muted); font-size: 0.8rem;">Quãng đường</p>
+                                    <p style="font-weight: 700; font-size: 1.2rem;">${trip.km} KM</p>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 15px;">
+                                    <p style="color: var(--text-muted); font-size: 0.8rem;">Chi phí</p>
+                                    <p style="font-weight: 700; font-size: 1.2rem; color: #feca57;">${trip.cost} đ</p>
+                                </div>
                             </div>
-                            
-                            <h3 style="color: var(--secondary-color); margin-bottom: 1.5rem; letter-spacing: 2px;">LỘ TRÌNH</h3>
-                            <div style="margin-bottom: 2rem;">
-                                ${routeSteps || '<p>Đang cập nhật lộ trình...</p>'}
-                            </div>
-
-                            <h3 style="color: var(--primary-color); margin-top: 3rem; margin-bottom: 1rem;">CẢM NHẬN</h3>
-                            <p style="font-style: italic; line-height: 1.8; color: var(--text-muted); font-size: 1.1rem;">"${trip.feel}"</p>
+                            <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">Lộ trình cụ thể:</h4>
+                            <p style="margin-bottom: 2rem; line-height: 1.6;">${trip.route}</p>
+                            <h4 style="margin-bottom: 0.5rem; color: var(--primary-color);">Cảm nhận:</h4>
+                            <p style="font-style: italic; opacity: 0.8;">"${trip.feel}"</p>
                         </div>
-                        
-                        <div class="journal-main">
-                            <h3 style="font-size: 1.8rem; margin-bottom: 2rem;">ALBUM HÀNH TRÌNH 📸</h3>
-                            <div class="album-grid">
-                                <img src="${trip.image}" style="border: 3px solid var(--primary-color);">
-                                ${albumImages || '<p style="color: var(--text-muted); grid-column: span 2;">Chưa có ảnh trong album.</p>'}
+                        <div class="photo-album">
+                            <h3 style="margin-bottom: 1.5rem;">Album Ảnh 📸</h3>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 1rem;">
+                                ${trip.album ? trip.album.map(img => `<img src="${img}" class="album-thumb" onclick="openLightbox('${img}')">`).join('') : '<p>Chưa có ảnh album.</p>'}
                             </div>
                         </div>
                     </div>
                 `;
-                tripModal.style.display = "block";
-                document.body.style.overflow = "hidden";
-            };
-
-            window.closeModal = function() {
-                tripModal.style.display = "none";
-                document.body.style.overflow = "auto";
-            };
-
-            window.onclick = function(event) {
-                if (event.target == tripModal) closeModal();
             };
 
             yearFilter.addEventListener('change', (e) => renderTimeline(e.target.value));
             renderTimeline();
         });
     </script>
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
+
