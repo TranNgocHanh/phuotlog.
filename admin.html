@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Trị | phuotlog.com</title>
+    <title>Quản Trị | phuotlog84.tv</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="admin-body">
 
     <nav>
-        <div class="logo">PHUOTLOG ADMIN.</div>
+        <div class="logo">PHUOTLOG84.TV ADMIN.</div>
         <div class="nav-links">
             <a href="index.html">Về trang chủ</a>
             <a href="#" class="admin-btn">Đăng xuất</a>
@@ -68,7 +68,14 @@
         </form>
 
         <section class="recent-trips">
-            <h2 style="margin-bottom: 1.5rem;">Các chuyến đi đã đăng</h2>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                <h2>Các chuyến đi đã đăng</h2>
+                <div style="display: flex; gap: 10px;">
+                    <button onclick="exportData()" style="background: rgba(78, 205, 196, 0.2); color: var(--secondary-color); border: 1px solid var(--secondary-color); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">📥 Xuất JSON</button>
+                    <label for="importFile" style="background: rgba(255, 107, 107, 0.2); color: var(--primary-color); border: 1px solid var(--primary-color); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">📤 Nhập JSON</label>
+                    <input type="file" id="importFile" accept=".json" style="display: none;" onchange="importData(event)">
+                </div>
+            </div>
             <table style="width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 16px; overflow: hidden;">
                 <thead>
                     <tr style="background: rgba(255,255,255,0.05); text-align: left;">
@@ -186,6 +193,39 @@
             renderTrips();
             alert('Đã lưu thành công!');
         });
+
+        // Tính năng Sao lưu/Khôi phục
+        window.exportData = function() {
+            const dataStr = JSON.stringify(trips);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const exportFileDefaultName = 'phuotlog_backup_' + new Date().toLocaleDateString() + '.json';
+            const linkElement = document.createElement('a');
+            linkElement.setAttribute('href', dataUri);
+            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.click();
+        }
+
+        window.importData = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedTrips = JSON.parse(e.target.result);
+                    if (Array.isArray(importedTrips)) {
+                        if (confirm('Bạn có muốn ghi đè dữ liệu hiện tại bằng dữ liệu mới không?')) {
+                            trips = importedTrips;
+                            saveToLocal();
+                            renderTrips();
+                            alert('Nhập dữ liệu thành công!');
+                        }
+                    }
+                } catch (err) {
+                    alert('File không hợp lệ!');
+                }
+            };
+            reader.readAsText(file);
+        }
 
         renderTrips();
     </script>
