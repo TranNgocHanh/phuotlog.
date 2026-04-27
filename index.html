@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>phuotlog.com | Hành Trình Tự Do</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-day">
+
+    <!-- Màn hình chờ khởi động -->
+    <div id="loading-screen">
+        <div class="loader-bike">🏍️</div>
+        <div class="loading-text">ĐANG NỔ MÁY...</div>
+    </div>
+
+    <!-- Lightbox phóng to ảnh -->
+    <div class="lightbox" id="lightbox">
+        <img src="" alt="Full view">
+    </div>
+
+    <!-- Tên lửa về nhà -->
+    <div id="scrollToTop" title="Về đầu trang">🚀</div>
+
+    <nav>
+        <div class="logo">PHUOTLOG.COM</div>
+        <div class="nav-links">
+            <a href="#home">Trang chủ</a>
+            <a href="#timeline">Hành trình</a>
+            <a href="admin.html" class="admin-btn">Quản trị</a>
+        </div>
+    </nav>
+
+    <section class="hero" id="home">
+        <h1>4 NĂM RỰC RỠ</h1>
+        <p>Ghi lại từng cung đường, từng đỉnh núi và những khoảnh khắc tự do tuyệt vời nhất từ năm 2023 đến 2026.</p>
+        <div id="typewriter"></div>
+        <div id="quote-display" style="margin-top: 1rem;">"Đường đi ở dưới chân mình..."</div>
+    </section>
+
+    <!-- Thanh chỉ số năm bên cạnh -->
+    <div class="year-indicator">
+        <div class="year-dot active" data-year="2023" onclick="document.getElementById('year2023').scrollIntoView()"></div>
+        <div class="year-dot" data-year="2024" onclick="document.getElementById('year2024').scrollIntoView()"></div>
+        <div class="year-dot" data-year="2025" onclick="document.getElementById('year2025').scrollIntoView()"></div>
+        <div class="year-dot" data-year="2026" onclick="document.getElementById('year2026').scrollIntoView()"></div>
+    </div>
+
+    <!-- Thống kê hành trình -->
+    <section class="stats-grid">
+        <div class="stat-item">
+            <span class="stat-number" data-target="10500">0</span>
+            <p>Tổng KM đã đi</p>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="35">0</span>
+            <p>Tỉnh thành đã qua</p>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="15">0</span>
+            <p>Đỉnh núi chinh phục</p>
+        </div>
+        <div class="stat-item">
+            <span class="stat-number" data-target="4">0</span>
+            <p>Năm hành trình</p>
+        </div>
+    </section>
+
+    <section class="map-section">
+        <h2>BẢN ĐỒ CHI TIẾT HÀNH TRÌNH</h2>
+        <p style="color: var(--text-muted); margin-bottom: 2rem;">Dấu chân qua các miền di sản từ 2023 đến 2026</p>
+        <div class="map-container" style="height: 850px; background: rgba(15, 23, 42, 0.5); display: flex; justify-content: center; align-items: center; border: 1px solid var(--glass-border); border-radius: 30px;">
+            <div class="map-placeholder" style="width: 100%; height: 100%; position: relative; display: flex; justify-content: center; align-items: center;">
+                <!-- Link bản đồ tĩnh cực kỳ ổn định hiển thị rõ các tỉnh -->
+                <img src="https://raw.githubusercontent.com/highcharts/map-collection-dist/master/countries/vn/vn-all.svg" 
+                     style="height: 90%; width: auto; filter: invert(1) brightness(1.5) sepia(1) hue-rotate(-50deg) saturate(3);" 
+                     alt="Bản đồ các tỉnh Việt Nam">
+                
+                <!-- Nhãn vùng miền -->
+                <div style="position: absolute; top: 10%; right: 20%; color: var(--primary-color); font-weight: 800; letter-spacing: 2px;">MIỀN BẮC</div>
+                <div style="position: absolute; top: 45%; left: 15%; color: var(--secondary-color); font-weight: 800; letter-spacing: 2px;">MIỀN TRUNG</div>
+                <div style="position: absolute; bottom: 15%; right: 25%; color: #f1c40f; font-weight: 800; letter-spacing: 2px;">MIỀN NAM</div>
+
+                <!-- Các điểm đánh dấu hành trình (Gắn cố định lên ảnh tĩnh) -->
+                <div style="position: absolute; top: 18%; left: 48%; color: #ff6b6b; font-size: 1.8rem; font-weight: 900; filter: drop-shadow(0 0 5px black);">📍 2023</div>
+                <div style="position: absolute; top: 62%; left: 54%; color: #4ecdc4; font-size: 1.8rem; font-weight: 900; filter: drop-shadow(0 0 5px black);">📍 2024</div>
+                <div style="position: absolute; top: 48%; left: 45%; color: #feca57; font-size: 1.8rem; font-weight: 900; filter: drop-shadow(0 0 5px black);">📍 2025</div>
+                <div style="position: absolute; bottom: 10%; left: 48%; color: #e74c3c; font-size: 1.8rem; font-weight: 900; filter: drop-shadow(0 0 5px black);">📍 2026</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="timeline-container" id="timeline">
+        <!-- Dữ liệu sẽ được tự động đổ vào đây từ LocalStorage -->
+    </section>
+
+    <!-- Hệ thống huy hiệu -->
+    <section class="achievements-section">
+        <h2 style="font-size: 3rem;">HUY HIỆU CHINH PHỤC</h2>
+        <div class="badge-grid">
+            <div class="badge-item" title="Đã vượt qua đèo Mã Pí Lèng">
+                <span class="badge-icon">⛰️</span>
+                <span class="badge-name">VUA ĐÈO</span>
+            </div>
+            <div class="badge-item" title="Hơn 1000km dọc đường biển">
+                <span class="badge-icon">🌊</span>
+                <span class="badge-name">SỨ GIẢ BIỂN</span>
+            </div>
+            <div class="badge-item" title="Hơn 50 đêm ngủ lều">
+                <span class="badge-icon">⛺</span>
+                <span class="badge-name">DÃ NGOẠI GIA</span>
+            </div>
+            <div class="badge-item" title="Chinh phục 3 cực của Tổ quốc">
+                <span class="badge-icon">🚩</span>
+                <span class="badge-name">KẺ CHINH PHỤC</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trình phát nhạc -->
+    <div class="music-player">
+        <div class="disc" id="musicDisc"></div>
+        <div>
+            <p style="font-size: 0.8rem; font-weight: 700; color: var(--primary-color);">PHƯỢT RADIO</p>
+            <p id="trackName" style="font-size: 0.7rem; color: var(--text-muted);">Chill Lo-fi Beat</p>
+        </div>
+        <button id="playBtn" style="background: none; border: none; cursor: pointer; font-size: 1.2rem;">▶️</button>
+    </div>
+    <section class="gear-section">
+        <h2 style="text-align: center; font-size: 3rem;">TRANG BỊ CỦA TÔI</h2>
+        <div class="gear-grid">
+            <div class="gear-item">
+                <span class="gear-icon">🏍️</span>
+                <h3>Chiến mã</h3>
+                <p>Honda XR150 - Bền bỉ trên mọi địa hình.</p>
+            </div>
+            <div class="gear-item">
+                <span class="gear-icon">⛺</span>
+                <h3>Lều trại</h3>
+                <p>Naturehike Cloud Up 2 - Ngôi nhà di động.</p>
+            </div>
+            <div class="gear-item">
+                <span class="gear-icon">📷</span>
+                <h3>Máy ảnh</h3>
+                <p>Sony A7C - Ghi lại mọi khoảnh khắc.</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="audio-toggle" id="audioToggle">
+        <span id="audioIcon">🔈</span>
+        <span id="audioText">Bật tiếng tự nhiên</span>
+    </div>
+
+    <footer style="padding: 3rem; text-align: center; border-top: 1px solid var(--glass-border);">
+        <p>&copy; 2026 phuotlog.com. Created with ❤️ for your journey.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const timelineContainer = document.getElementById('timeline');
+            const trips = JSON.parse(localStorage.getItem('myTrips')) || [
+                { id: 1, name: "Hà Giang Loop", year: "2023", km: 2500, feel: "Hành trình tuyệt vời nhất đời mình.", image: "travel_2023_demo_1777135941537.png" },
+                { id: 2, name: "Phú Yên - Quy Nhơn", year: "2024", km: 1200, feel: "Biển xanh vẫy gọi.", image: "travel_2024_demo_1777135960331.png" }
+            ];
+
+            // Hàm render timeline
+            function renderTimeline() {
+                timelineContainer.innerHTML = '';
+                trips.sort((a, b) => a.year - b.year).forEach((trip, index) => {
+                    const isEven = index % 2 !== 0;
+                    const block = `
+                        <div class="year-block" id="year${trip.year}" style="margin-bottom: 10rem; display: flex; ${isEven ? 'flex-direction: row-reverse;' : ''} align-items: center; justify-content: space-between; position: relative;">
+                            <div class="year-label" style="position: absolute; left: 50%; transform: translateX(-50%); background: var(--accent-gradient); padding: 0.5rem 1.5rem; border-radius: 50px; font-weight: 800; z-index: 2; box-shadow: 0 0 20px rgba(255, 107, 107, 0.4);">${trip.year}</div>
+                            <div class="content-card-wrapper">
+                                <div class="content-card">
+                                    <div class="card-front">
+                                        <img src="${trip.image || 'https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80'}" alt="${trip.name}">
+                                        <h2>${trip.name}</h2>
+                                        <p>${trip.feel.substring(0, 100)}${trip.feel.length > 100 ? '...' : ''}</p>
+                                        <div class="stats">
+                                            <span>📅 ${trip.date || trip.year}</span>
+                                            <span>🏍️ ${trip.km} KM</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-back">
+                                        <h3>Kỷ Niệm ${trip.year}</h3>
+                                        <p>"${trip.feel}"</p>
+                                        <button class="admin-btn" style="margin-top: 1rem;" onclick="event.stopPropagation(); createHeart(event)">❤️ Thả tim</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="width: 45%;"></div>
+                        </div>
+                    `;
+                    timelineContainer.innerHTML += block;
+                });
+            }
+
+            renderTimeline();
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
