@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Huy hiệu Chinh phục - PHUOTLOG84.TV</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+        .badge-card {
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+        .badge-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--secondary-color);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .badge-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+        }
+        .badge-card h3 {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .badge-date {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+        .badge-desc {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .locked {
+            filter: grayscale(1) opacity(0.5);
+        }
+        .locked::after {
+            content: "🔒 CHƯA ĐẠT";
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            font-size: 0.7rem;
+            background: rgba(0,0,0,0.5);
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="stars"></div>
+    
+    <nav>
+        <div class="logo" onclick="location.href='index.html'" style="cursor:pointer">PHUOTLOG84.TV</div>
+        <div class="nav-links">
+            <a href="index.html">Trang chủ</a>
+            <a href="huyhieu.html" class="active">Huy hiệu</a>
+            <a href="trangbi.html">Trang bị</a>
+        </div>
+    </nav>
+
+    <main class="container" style="margin-top: 100px;">
+        <header style="text-align: center; margin-bottom: 4rem;">
+            <h1 style="font-size: 3.5rem; margin-bottom: 1rem; background: linear-gradient(to right, #ff6b6b, #4ecdc4); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">BẢNG VÀNG CHINH PHỤC</h1>
+            <p style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Mỗi huy hiệu là một minh chứng cho sự kiên trì, lòng quả cảm và khát vọng tự do trên những cung đường.</p>
+        </header>
+
+        <div class="badge-grid">
+            <!-- Huy hiệu 1 -->
+            <div class="badge-card">
+                <div class="badge-icon">🏔️</div>
+                <h3>Nóc nhà Đông Dương</h3>
+                <p class="badge-date">Đã đạt: 15/12/2023</p>
+                <p class="badge-desc">Chinh phục đỉnh Fansipan (3.143m) bằng đường bộ qua cung Trạm Tôn.</p>
+            </div>
+
+            <!-- Huy hiệu 2 -->
+            <div class="badge-card">
+                <div class="badge-icon">🏍️</div>
+                <h3>Sát thủ cung đường</h3>
+                <p class="badge-date">Đã đạt: 20/05/2024</p>
+                <p class="badge-desc">Hoàn thành chuyến đi xuyên Việt 2.500km từ Lũng Cú đến Đất Mũi trong 21 ngày.</p>
+            </div>
+
+            <!-- Huy hiệu 3 -->
+            <div class="badge-card">
+                <div class="badge-icon">🌊</div>
+                <h3>Vua Biển Đảo</h3>
+                <p class="badge-date">Đã đạt: 10/08/2024</p>
+                <p class="badge-desc">Đặt chân đến 5 hòn đảo lớn nhất Việt Nam: Phú Quốc, Côn Đảo, Lý Sơn, Phú Quý, Cát Bà.</p>
+            </div>
+
+            <!-- Huy hiệu 4 (Khóa) -->
+            <div class="badge-card locked">
+                <div class="badge-icon">⛺</div>
+                <h3>Bậc thầy cắm trại</h3>
+                <p class="badge-date">Mục tiêu: 2025</p>
+                <p class="badge-desc">Sống sót 7 ngày liên tiếp giữa rừng quốc gia mà không sử dụng tiện nghi hiện đại.</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

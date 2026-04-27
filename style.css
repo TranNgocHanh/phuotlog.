@@ -130,8 +130,9 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Times New Roman', Times, serif;
 }
+
 
 body {
     background-color: var(--dark-bg);
@@ -302,54 +303,49 @@ nav {
     transform: translateX(-50%);
 }
 
-/* 3D Flip Card */
-.content-card-wrapper {
-    perspective: 1000px;
-    width: 45%;
-}
-
 .content-card {
     position: relative;
     width: 100%;
-    min-height: 500px;
-    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-style: preserve-3d;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 0;
-}
-
-.content-card-wrapper:hover .content-card {
-    transform: rotateY(180deg);
-}
-
-.card-front, .card-back {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    backface-visibility: hidden;
+    min-height: 400px;
     background: var(--card-bg);
-    padding: 2rem;
-    border-radius: 24px;
+    border-radius: 30px;
     border: 1px solid var(--glass-border);
     backdrop-filter: blur(12px);
-    display: flex;
-    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.4s ease;
 }
 
-.card-back {
-    transform: rotateY(180deg);
+.content-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--primary-color);
+}
+
+.like-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    background: linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)), var(--accent-gradient);
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: white;
+    transition: all 0.3s ease;
+    z-index: 10;
 }
 
-.card-back h3 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
+.like-btn.active {
+    background: #ff4757;
+    color: white;
+    transform: scale(1.2);
 }
+
 
 /* Side Year Indicator */
 .year-indicator {
@@ -564,8 +560,10 @@ button.submit-btn:hover {
 }
 
 input[type="file"] {
-    display: none;
+    display: block;
+    margin-top: 0.5rem;
 }
+
 
 /* Achievements */
 .achievements-section {
@@ -758,3 +756,143 @@ input[type="file"] {
     .nav-links { display: none; } /* Ẩn menu chữ, có thể thêm menu burger sau */
 }
 
+
+/* --- MODAL NHẬT KÝ CHI TIẾT --- */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(15px);
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.modal-content {
+    background: var(--card-bg);
+    margin: auto;
+    border: 1px solid var(--glass-border);
+    width: 100%;
+    max-width: 1200px;
+    border-radius: 40px;
+    position: relative;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: modalSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes modalSlideUp {
+    from { opacity: 0; transform: translateY(100px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.close-modal {
+    position: absolute;
+    right: 30px;
+    top: 25px;
+    color: white;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 100;
+    width: 50px;
+    height: 50px;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    transition: all 0.3s;
+}
+
+.close-modal:hover {
+    background: #ff6b6b;
+    transform: rotate(90deg);
+}
+
+.journal-container {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 80vh;
+}
+
+.journal-sidebar {
+    flex: 1;
+    min-width: 350px;
+    padding: 3rem;
+    background: rgba(255,255,255,0.02);
+    border-right: 1px solid var(--glass-border);
+}
+
+.journal-main {
+    flex: 2;
+    min-width: 450px;
+    padding: 3rem;
+}
+
+.route-step {
+    position: relative;
+    padding-left: 30px;
+    padding-bottom: 25px;
+    border-left: 2px solid var(--secondary-color);
+    margin-left: 10px;
+}
+
+.route-step::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 0;
+    width: 12px;
+    height: 12px;
+    background: var(--secondary-color);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--secondary-color);
+}
+
+.album-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+}
+
+.album-grid img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border: 1px solid var(--glass-border);
+}
+
+.album-grid img:hover {
+    transform: scale(1.03);
+    border-color: var(--primary-color);
+}
+
+.view-more-btn {
+    background: var(--accent-gradient);
+    border: none;
+    color: white;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+    transition: all 0.3s;
+}
+
+.year-label-bubble {
+    background: var(--accent-gradient);
+    padding: 0.6rem 2rem;
+    border-radius: 50px;
+    font-weight: 900;
+    font-size: 1.2rem;
+    display: inline-block;
+    margin-bottom: 2rem;
+    box-shadow: 0 0 20px rgba(255, 107, 107, 0.5);
+}
