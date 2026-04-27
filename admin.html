@@ -388,15 +388,35 @@
             currentAlbumBase64 = [];
             renderTrips();
             showToast("✅ Đã lưu hành trình!");
+            location.reload();
         });
 
         window.exportData = function() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({trips, visitedProvinces}));
+            const fullData = { trips, visitedProvinces, myStats };
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(fullData));
             const dl = document.createElement('a');
             dl.setAttribute("href", dataStr);
             dl.setAttribute("download", "backup_phuotlog.json");
             dl.click();
         };
+
+        window.importData = function(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.trips) localStorage.setItem('myTrips', JSON.stringify(data.trips));
+                    if (data.visitedProvinces) localStorage.setItem('visitedProvinces', JSON.stringify(data.visitedProvinces));
+                    if (data.myStats) localStorage.setItem('myStats', JSON.stringify(data.myStats));
+                    alert('Đã đồng bộ dữ liệu thành công! Trang web sẽ tự tải lại.');
+                    location.reload();
+                } catch (err) { alert('Lỗi: File không đúng định dạng!'); }
+            };
+            reader.readAsText(file);
+        };
+
 
         // Khởi tạo checkbox bản đồ
         document.querySelectorAll('#province-checklist input').forEach(cb => {
