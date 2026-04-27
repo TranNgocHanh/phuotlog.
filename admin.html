@@ -19,57 +19,162 @@
 
     <main class="admin-container">
         <header style="margin-bottom: 3rem;">
-            <h1 style="font-size: 3rem;">Thêm Hành Trình Mới</h1>
-            <p style="color: var(--text-muted);">Cập nhật những cung đường mới nhất của bạn vào Timeline.</p>
+            <h1 style="font-size: 3rem;">Quản Trị Hành Trình</h1>
+            <p style="color: var(--text-muted);">Quản lý bản đồ dấu chân và các bài viết hành trình của bạn.</p>
         </header>
 
-        <form class="form-grid" id="tripForm">
-            <div class="input-group">
-                <label>Tên chuyến đi</label>
-                <input type="text" placeholder="Ví dụ: Chinh phục cực Bắc" required>
-            </div>
-            <div class="input-group">
-                <label>Năm thực hiện</label>
-                <select required>
-                    <option value="2020">2020</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option>
-                    <option value="2023" selected>2023</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    <option value="2027">2027</option>
-                    <option value="2028">2028</option>
-                </select>
-            </div>
-            <div class="input-group">
-                <label>Số KM đã đi</label>
-                <input type="number" placeholder="Ví dụ: 1500">
-            </div>
-            <div class="input-group">
-                <label>Ngày khởi hành</label>
-                <input type="date" required>
-            </div>
-            <div class="input-group" style="grid-column: span 2;">
-                <label>Hình ảnh chuyến đi</label>
-                <div class="file-upload-wrapper">
-                    <label for="imageUpload" class="file-upload-label">
-                        <span id="uploadText">📸 Nhấn để chọn ảnh từ máy tính</span>
-                        <input type="file" id="imageUpload" accept="image/*" required>
-                    </label>
-                    <img id="imagePreview" src="#" alt="Xem trước ảnh">
+        <!-- PHẦN 1: QUẢN LÝ BẢN ĐỒ (DẤU CHÂN) -->
+        <section style="background: var(--card-bg); padding: 2rem; border-radius: 24px; border: 1px solid var(--glass-border); margin-bottom: 3rem;">
+            <h2 style="margin-bottom: 1rem; color: var(--secondary-color);">📍 QUẢN LÝ BẢN ĐỒ (DẤU CHÂN)</h2>
+            <p style="margin-bottom: 1.5rem; font-size: 0.9rem; color: var(--text-muted);">Tích chọn tất cả những nơi bạn đã từng đặt chân đến để tô màu bản đồ trang chủ.</p>
+            
+            <div id="province-checklist" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; background: rgba(0,0,0,0.2); padding: 1.5rem; border-radius: 12px; margin-bottom: 1.5rem; max-height: 500px; overflow-y: auto;">
+                <!-- MIỀN BẮC (25 tỉnh thành) -->
+                <div class="region-group">
+                    <p style="color: var(--primary-color); font-weight: 800; margin-bottom: 0.8rem; border-bottom: 1px solid var(--primary-color);">MIỀN BẮC</p>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label><input type="checkbox" value="vn-318"> Hà Nội</label>
+                        <label><input type="checkbox" value="vn-3623"> Hải Phòng</label>
+                        <label><input type="checkbox" value="vn-hg"> Hà Giang</label>
+                        <label><input type="checkbox" value="vn-cb"> Cao Bằng</label>
+                        <label><input type="checkbox" value="vn-307"> Bắc Kạn</label>
+                        <label><input type="checkbox" value="vn-tq"> Tuyên Quang</label>
+                        <label><input type="checkbox" value="vn-lo"> Lào Cai</label>
+                        <label><input type="checkbox" value="vn-db"> Điện Biên</label>
+                        <label><input type="checkbox" value="vn-li"> Lai Châu</label>
+                        <label><input type="checkbox" value="vn-311"> Sơn La</label>
+                        <label><input type="checkbox" value="vn-yb"> Yên Bái</label>
+                        <label><input type="checkbox" value="vn-ho"> Hòa Bình</label>
+                        <label><input type="checkbox" value="vn-ty"> Thái Nguyên</label>
+                        <label><input type="checkbox" value="vn-ls"> Lạng Sơn</label>
+                        <label><input type="checkbox" value="vn-qn"> Quảng Ninh</label>
+                        <label><input type="checkbox" value="vn-bg"> Bắc Giang</label>
+                        <label><input type="checkbox" value="vn-pt"> Phú Thọ</label>
+                        <label><input type="checkbox" value="vn-vc"> Vĩnh Phúc</label>
+                        <label><input type="checkbox" value="vn-bn"> Bắc Ninh</label>
+                        <label><input type="checkbox" value="vn-hd"> Hải Dương</label>
+                        <label><input type="checkbox" value="vn-317"> Hưng Yên</label>
+                        <label><input type="checkbox" value="vn-tb"> Thái Bình</label>
+                        <label><input type="checkbox" value="vn-hm"> Hà Nam</label>
+                        <label><input type="checkbox" value="vn-nd"> Nam Định</label>
+                        <label><input type="checkbox" value="vn-nb"> Ninh Bình</label>
+                    </div>
+                </div>
+                <!-- MIỀN TRUNG (19 tỉnh thành) -->
+                <div class="region-group">
+                    <p style="color: var(--secondary-color); font-weight: 800; margin-bottom: 0.8rem; border-bottom: 1px solid var(--secondary-color);">MIỀN TRUNG</p>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label><input type="checkbox" value="vn-th"> Thanh Hóa</label>
+                        <label><input type="checkbox" value="vn-na"> Nghệ An</label>
+                        <label><input type="checkbox" value="vn-328"> Hà Tĩnh</label>
+                        <label><input type="checkbox" value="vn-qb"> Quảng Bình</label>
+                        <label><input type="checkbox" value="vn-qt"> Quảng Trị</label>
+                        <label><input type="checkbox" value="vn-tt"> Thừa Thiên Huế</label>
+                        <label><input type="checkbox" value="vn-da"> Đà Nẵng</label>
+                        <label><input type="checkbox" value="vn-300"> Quảng Nam</label>
+                        <label><input type="checkbox" value="vn-qg"> Quảng Ngãi</label>
+                        <label><input type="checkbox" value="vn-bd"> Bình Định</label>
+                        <label><input type="checkbox" value="vn-py"> Phú Yên</label>
+                        <label><input type="checkbox" value="vn-kh"> Khánh Hòa</label>
+                        <label><input type="checkbox" value="vn-nt"> Ninh Thuận</label>
+                        <label><input type="checkbox" value="vn-bu"> Bình Thuận</label>
+                        <label><input type="checkbox" value="vn-299"> Kon Tum</label>
+                        <label><input type="checkbox" value="vn-724"> Gia Lai</label>
+                        <label><input type="checkbox" value="vn-723"> Đắk Lắk</label>
+                        <label><input type="checkbox" value="vn-6365"> Đắk Nông</label>
+                        <label><input type="checkbox" value="vn-ld"> Lâm Đồng</label>
+                    </div>
+                </div>
+                <!-- MIỀN NAM (19 tỉnh thành) -->
+                <div class="region-group">
+                    <p style="color: #f1c40f; font-weight: 800; margin-bottom: 0.8rem; border-bottom: 1px solid #f1c40f;">MIỀN NAM</p>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label><input type="checkbox" value="vn-hc"> TP Hồ Chí Minh</label>
+                        <label><input type="checkbox" value="vn-bp"> Bình Phước</label>
+                        <label><input type="checkbox" value="vn-tn"> Tây Ninh</label>
+                        <label><input type="checkbox" value="vn-bi"> Bình Dương</label>
+                        <label><input type="checkbox" value="vn-331"> Đồng Nai</label>
+                        <label><input type="checkbox" value="vn-bv"> Bà Rịa – Vũng Tàu</label>
+                        <label><input type="checkbox" value="vn-la"> Long An</label>
+                        <label><input type="checkbox" value="vn-tg"> Tiền Giang</label>
+                        <label><input type="checkbox" value="vn-br"> Bến Tre</label>
+                        <label><input type="checkbox" value="vn-tv"> Trà Vinh</label>
+                        <label><input type="checkbox" value="vn-vl"> Vĩnh Long</label>
+                        <label><input type="checkbox" value="vn-dt"> Đồng Tháp</label>
+                        <label><input type="checkbox" value="vn-ag"> An Giang</label>
+                        <label><input type="checkbox" value="vn-kg"> Kiên Giang</label>
+                        <label><input type="checkbox" value="vn-333"> Cần Thơ</label>
+                        <label><input type="checkbox" value="vn-337"> Hậu Giang</label>
+                        <label><input type="checkbox" value="vn-st"> Sóc Trăng</label>
+                        <label><input type="checkbox" value="vn-bl"> Bạc Liêu</label>
+                        <label><input type="checkbox" value="vn-cm"> Cà Mau</label>
+                    </div>
+                </div>
+                <!-- BIỂN ĐẢO -->
+                <div class="region-group">
+                    <p style="color: #0abde3; font-weight: 800; margin-bottom: 0.8rem; border-bottom: 1px solid #0abde3;">BIỂN ĐẢO</p>
+                    <div style="display: flex; flex-direction: column; gap: 8px;">
+                        <label><input type="checkbox" value="vn-hs"> Quần đảo Hoàng Sa</label>
+                        <label><input type="checkbox" value="vn-ts"> Quần đảo Trường Sa</label>
+                    </div>
                 </div>
             </div>
-            <div class="input-group" style="grid-column: span 2;">
-                <label>Cảm nhận về chuyến đi</label>
-                <textarea rows="5" placeholder="Chia sẻ cảm xúc của bạn về hành trình này..."></textarea>
-            </div>
-            <button type="submit" class="submit-btn">CẬP NHẬT HÀNH TRÌNH</button>
-        </form>
+
+
+            <button onclick="saveMap()" class="submit-btn" style="width: auto; padding: 1rem 3rem;">LƯU BẢN ĐỒ DẤU CHÂN</button>
+        </section>
+
+        <!-- PHẦN 2: THÊM HÀNH TRÌNH MỚI -->
+        <section>
+            <h2 style="margin-bottom: 1.5rem; color: var(--primary-color);">✍️ THÊM HÀNH TRÌNH MỚI (TIMELINE)</h2>
+            <form class="form-grid" id="tripForm">
+                <div class="input-group">
+                    <label>Tên chuyến đi</label>
+                    <input type="text" placeholder="Ví dụ: Chinh phục cực Bắc" required>
+                </div>
+                <div class="input-group">
+                    <label>Năm thực hiện</label>
+                    <select required>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                        <option value="2023" selected>2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                        <option value="2028">2028</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Số KM đã đi</label>
+                    <input type="number" placeholder="Ví dụ: 1500">
+                </div>
+                <div class="input-group">
+                    <label>Ngày khởi hành</label>
+                    <input type="date" required>
+                </div>
+                <div class="input-group" style="grid-column: span 2;">
+                    <label>Hình ảnh chuyến đi</label>
+                    <div class="file-upload-wrapper">
+                        <label for="imageUpload" class="file-upload-label">
+                            <span id="uploadText">📸 Nhấn để chọn ảnh từ máy tính</span>
+                            <input type="file" id="imageUpload" accept="image/*">
+                        </label>
+                        <img id="imagePreview" src="#" alt="Xem trước ảnh">
+                    </div>
+                </div>
+                <div class="input-group" style="grid-column: span 2;">
+                    <label>Cảm nhận về chuyến đi</label>
+                    <textarea rows="5" placeholder="Chia sẻ cảm xúc của bạn về hành trình này..."></textarea>
+                </div>
+                <button type="submit" class="submit-btn">CẬP NHẬT HÀNH TRÌNH VÀO TIMELINE</button>
+            </form>
+        </section>
 
         <section class="recent-trips">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
-                <h2>Các chuyến đi đã đăng</h2>
+                <h2>Các bài viết đã đăng</h2>
                 <div style="display: flex; gap: 10px;">
                     <button onclick="exportData()" style="background: rgba(78, 205, 196, 0.2); color: var(--secondary-color); border: 1px solid var(--secondary-color); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">📥 Xuất JSON</button>
                     <label for="importFile" style="background: rgba(255, 107, 107, 0.2); color: var(--primary-color); border: 1px solid var(--primary-color); padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">📤 Nhập JSON</label>
@@ -79,7 +184,7 @@
             <table style="width: 100%; border-collapse: collapse; background: var(--card-bg); border-radius: 16px; overflow: hidden;">
                 <thead>
                     <tr style="background: rgba(255,255,255,0.05); text-align: left;">
-                        <th style="padding: 1.5rem;">Tên chuyến đi</th>
+                        <th style="padding: 1.5rem;">Tên bài viết</th>
                         <th style="padding: 1.5rem;">Năm</th>
                         <th style="padding: 1.5rem;">Trạng thái</th>
                         <th style="padding: 1.5rem;">Thao tác</th>
@@ -93,12 +198,9 @@
     </main>
 
     <script>
-        // Tải dữ liệu từ LocalStorage hoặc dùng mặc định nếu chưa có
-        let trips = JSON.parse(localStorage.getItem('myTrips')) || [
-            { id: 1, name: "Hà Giang Loop", year: "2023", km: 2500, feel: "Hành trình tuyệt vời nhất đời mình." },
-            { id: 2, name: "Phú Yên - Quy Nhơn", year: "2024", km: 1200, feel: "Biển xanh vẫy gọi." }
-        ];
-
+        // Tải dữ liệu từ LocalStorage
+        let trips = JSON.parse(localStorage.getItem('myTrips')) || [];
+        let visitedProvinces = JSON.parse(localStorage.getItem('visitedProvinces')) || [];
         let editId = null;
 
         const tripForm = document.getElementById('tripForm');
@@ -107,7 +209,21 @@
         const uploadText = document.getElementById('uploadText');
         const tripTableBody = document.getElementById('tripTableBody');
 
-        // Hàm lưu vào LocalStorage
+        // Khởi tạo các dấu tích bản đồ
+        function initMapCheckboxes() {
+            const checkboxes = document.querySelectorAll('#province-checklist input');
+            checkboxes.forEach(cb => {
+                cb.checked = visitedProvinces.includes(cb.value);
+            });
+        }
+
+        // Lưu bản đồ dấu chân
+        window.saveMap = function() {
+            const selected = Array.from(document.querySelectorAll('#province-checklist input:checked')).map(cb => cb.value);
+            localStorage.setItem('visitedProvinces', JSON.stringify(selected));
+            alert('Đã cập nhật bản đồ thành công!');
+        }
+
         function saveToLocal() {
             localStorage.setItem('myTrips', JSON.stringify(trips));
         }
@@ -147,18 +263,19 @@
             const trip = trips.find(t => t.id === id);
             if (trip) {
                 editId = id;
-                document.querySelectorAll('input')[0].value = trip.name;
-                document.querySelector('select').value = trip.year;
-                document.querySelectorAll('input')[1].value = trip.km;
-                document.querySelectorAll('input')[2].value = trip.date || ""; // Ô ngày tháng
-                document.querySelector('textarea').value = trip.feel;
+                const inputs = tripForm.querySelectorAll('input');
+                inputs[0].value = trip.name;
+                tripForm.querySelector('select').value = trip.year;
+                inputs[1].value = trip.km;
+                inputs[2].value = trip.date || ""; 
+                tripForm.querySelector('textarea').value = trip.feel;
                 window.scrollTo({ top: 0, behavior: 'smooth' });
                 document.querySelector('.submit-btn').innerText = "LƯU THAY ĐỔI";
             }
         }
 
         window.deleteTrip = function(id) {
-            if (confirm('Bạn có chắc chắn muốn xóa?')) {
+            if (confirm('Bạn có chắc chắn muốn xóa bài viết này?')) {
                 trips = trips.filter(t => t.id !== id);
                 saveToLocal();
                 renderTrips();
@@ -167,21 +284,22 @@
 
         tripForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            const inputs = document.querySelectorAll('input');
+            const inputs = tripForm.querySelectorAll('input');
             const newTrip = {
                 id: editId || Date.now(),
                 name: inputs[0].value,
-                year: document.querySelector('select').value,
+                year: tripForm.querySelector('select').value,
                 km: inputs[1].value,
-                feel: document.querySelector('textarea').value,
-                image: imagePreview.src // Lưu luôn chuỗi ảnh Base64
+                date: inputs[2].value,
+                feel: tripForm.querySelector('textarea').value,
+                image: imagePreview.src 
             };
 
             if (editId) {
                 const index = trips.findIndex(t => t.id === editId);
                 trips[index] = newTrip;
                 editId = null;
-                document.querySelector('.submit-btn').innerText = "CẬP NHẬT HÀNH TRÌNH";
+                document.querySelector('.submit-btn').innerText = "CẬP NHẬT HÀNH TRÌNH VÀO TIMELINE";
             } else {
                 trips.push(newTrip);
             }
@@ -191,17 +309,17 @@
             imagePreview.style.display = 'none';
             uploadText.textContent = "📸 Nhấn để chọn ảnh từ máy tính";
             renderTrips();
-            alert('Đã lưu thành công!');
+            alert('Đã lưu bài viết thành công!');
         });
 
-        // Tính năng Sao lưu/Khôi phục
+        // Xuất/Nhập dữ liệu
         window.exportData = function() {
-            const dataStr = JSON.stringify(trips);
+            const fullData = { trips, visitedProvinces };
+            const dataStr = JSON.stringify(fullData);
             const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-            const exportFileDefaultName = 'phuotlog_backup_' + new Date().toLocaleDateString() + '.json';
             const linkElement = document.createElement('a');
             linkElement.setAttribute('href', dataUri);
-            linkElement.setAttribute('download', exportFileDefaultName);
+            linkElement.setAttribute('download', 'phuotlog_full_backup.json');
             linkElement.click();
         }
 
@@ -211,23 +329,24 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    const importedTrips = JSON.parse(e.target.result);
-                    if (Array.isArray(importedTrips)) {
-                        if (confirm('Bạn có muốn ghi đè dữ liệu hiện tại bằng dữ liệu mới không?')) {
-                            trips = importedTrips;
-                            saveToLocal();
-                            renderTrips();
-                            alert('Nhập dữ liệu thành công!');
-                        }
+                    const data = JSON.parse(e.target.result);
+                    if (data.trips && data.visitedProvinces) {
+                        trips = data.trips;
+                        visitedProvinces = data.visitedProvinces;
+                        saveToLocal();
+                        localStorage.setItem('visitedProvinces', JSON.stringify(visitedProvinces));
+                        renderTrips();
+                        initMapCheckboxes();
+                        alert('Đã khôi phục toàn bộ dữ liệu!');
                     }
-                } catch (err) {
-                    alert('File không hợp lệ!');
-                }
+                } catch (err) { alert('File không hợp lệ!'); }
             };
             reader.readAsText(file);
         }
 
+        initMapCheckboxes();
         renderTrips();
     </script>
+
 </body>
 </html>

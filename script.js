@@ -139,6 +139,88 @@ document.addEventListener('DOMContentLoaded', () => {
         obs.observe(c);
     });
 
+    // --- HỆ THỐNG BẢN ĐỒ TƯƠNG TÁC ---
+    const mapContainer = document.getElementById('vietnam-map');
+    if (mapContainer) {
+        fetch('https://raw.githubusercontent.com/highcharts/map-collection-dist/master/countries/vn/vn-all.svg')
+            .then(res => res.text())
+            .then(svgText => {
+                mapContainer.innerHTML = svgText;
+                const svg = mapContainer.querySelector('svg');
+                svg.style.height = '90%';
+                svg.style.width = 'auto';
+                
+                // --- TỰ ĐỘNG THÊM HOÀNG SA & TRƯỜNG SA ---
+                if (!svg.querySelector('#vn-hs')) {
+                    const hoangSa = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    hoangSa.setAttribute('id', 'vn-hs');
+                    hoangSa.setAttribute('class', 'vn-hs island-group');
+                    hoangSa.innerHTML = `
+                        <circle cx="480" cy="280" r="3" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+                        <circle cx="490" cy="290" r="2.5" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+                        <circle cx="500" cy="275" r="3.5" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+                        <text x="510" y="270" font-size="12" fill="#fff" font-weight="bold" style="pointer-events:none;">Hoàng Sa</text>
+                    `;
+                    svg.querySelector('g').appendChild(hoangSa);
+                }
+                if (!svg.querySelector('#vn-ts')) {
+                    const truongSa = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                    truongSa.setAttribute('id', 'vn-ts');
+                    truongSa.setAttribute('class', 'vn-ts island-group');
+                    truongSa.innerHTML = `
+                        <circle cx="550" cy="580" r="2" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+                        <circle cx="570" cy="600" r="3" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+                        <circle cx="590" cy="630" r="2.5" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+                        <circle cx="610" cy="650" r="3" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+                        <circle cx="560" cy="640" r="2" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="0.5"/>
+                        <text x="620" y="640" font-size="12" fill="#fff" font-weight="bold" style="pointer-events:none;">Trường Sa</text>
+                    `;
+                    svg.querySelector('g').appendChild(truongSa);
+                }
+
+                // Xóa triệt để dòng chữ bản quyền của Highcharts
+                const allTexts = svg.querySelectorAll('text');
+                allTexts.forEach(t => {
+                    if (t.textContent.includes('Highsoft') || t.textContent.includes('Natural Earth')) {
+                        t.remove();
+                    }
+                });
+
+                // Style mặc định cho tất cả các tỉnh
+                const paths = svg.querySelectorAll('path');
+                paths.forEach(path => {
+                    path.style.fill = 'rgba(255, 255, 255, 0.1)';
+                    path.style.stroke = 'rgba(255, 255, 255, 0.2)';
+                    path.style.strokeWidth = '0.5';
+                    path.style.transition = 'all 0.5s ease';
+                });
+
+                // Lấy danh sách các tỉnh đã đi từ mục "Quản lý bản đồ" riêng biệt
+                const visitedProvinces = JSON.parse(localStorage.getItem('visitedProvinces')) || [];
+
+                // Tô màu các tỉnh đã đi
+                const colors = ['#ff6b6b', '#4ecdc4', '#feca57', '#ff9f43', '#0abde3', '#ee5253', '#10ac84'];
+                let colorIdx = 0;
+                
+                visitedProvinces.forEach(provinceId => {
+                    const element = svg.querySelector(`path[id="${provinceId}"], .${provinceId}, g[id="${provinceId}"]`);
+                    if (element) {
+                        const color = colors[colorIdx % colors.length];
+                        if (element.tagName.toLowerCase() === 'g') {
+                            element.querySelectorAll('circle').forEach(c => {
+                                c.style.fill = color;
+                                c.style.filter = `drop-shadow(0 0 5px ${color})`;
+                            });
+                        } else {
+                            element.style.fill = color;
+                            element.style.filter = `drop-shadow(0 0 5px ${color})`;
+                        }
+                        colorIdx++;
+                    }
+                });
+            });
+    }
+
     window.createHeart = (e) => {
         const h = document.createElement('div');
         h.className = 'heart'; h.innerHTML = '❤️';
