@@ -14,7 +14,6 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 document.addEventListener('DOMContentLoaded', () => {
-    
     // 1. Typewriter Intro
     const typewriter = document.getElementById('typewriter');
     if (typewriter) {
@@ -42,12 +41,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // 3. Vietnam Map Initialization (Firebase Cloud)
+    // 3. Vietnam Map Initialization (Cloud Sync)
     const mapContainer = document.getElementById('vietnam-map');
     if (mapContainer) {
         fetch('https://code.highcharts.com/mapdata/countries/vn/vn-all.topo.json')
             .then(r => r.json())
             .then(async topoData => {
+                // Khởi tạo bản đồ
                 Highcharts.mapChart('vietnam-map', {
                     chart: { backgroundColor: 'transparent' },
                     title: { text: null },
@@ -62,44 +62,51 @@ document.addEventListener('DOMContentLoaded', () => {
                     }]
                 });
 
-                // Lấy dữ liệu tỉnh từ Firebase
+                // Lấy dữ liệu từ Cloud
                 let visited = [];
                 try {
                     const snap = await getDoc(doc(db, "settings", "map"));
                     if (snap.exists()) visited = snap.data().provinces || [];
-                } catch (e) { console.error(e); }
+                } catch (e) { console.error("Firebase Error:", e); }
 
-                const observer = new MutationObserver(() => {
+                // Hàm thực hiện tô màu
+                const applyMapStyles = () => {
                     const svg = mapContainer.querySelector('svg');
-                    if (svg) {
-                        observer.disconnect();
-                        
-                        // Xóa bản quyền & style mặc định
-                        svg.querySelectorAll('text').forEach(t => {
-                            if (t.textContent.includes('Highsoft')) t.remove();
-                        });
+                    if (!svg) return false;
 
-                        // Thêm Hoàng Sa & Trường Sa
-                        injectIslands(svg);
+                    // Xóa bản quyền
+                    svg.querySelectorAll('text').forEach(t => {
+                        if (t.textContent.includes('Highsoft')) t.remove();
+                    });
 
-                        // Tô màu các tỉnh đã đi
-                        const colors = ['#ff6b6b', '#4ecdc4', '#feca57', '#ff9f43', '#0abde3'];
-                        let cIdx = 0;
-                        visited.forEach(id => {
-                            const el = svg.querySelector(`path[id="${id}"], .${id}, g[id="${id}"]`);
-                            if (el) {
-                                const color = colors[cIdx % colors.length];
-                                if (el.tagName === 'g') {
-                                    el.querySelectorAll('circle').forEach(c => c.style.fill = color);
-                                } else {
-                                    el.style.fill = color;
-                                }
-                                cIdx++;
+                    // Thêm Hoàng Sa & Trường Sa
+                    injectIslands(svg);
+
+                    // Tô màu
+                    const colors = ['#ff6b6b', '#4ecdc4', '#feca57', '#ff9f43', '#0abde3'];
+                    let cIdx = 0;
+                    visited.forEach(id => {
+                        const el = svg.querySelector(`path[id="${id}"], .${id}, g[id="${id}"]`);
+                        if (el) {
+                            const color = colors[cIdx % colors.length];
+                            if (el.tagName === 'g') {
+                                el.querySelectorAll('circle').forEach(c => c.style.fill = color);
+                            } else {
+                                el.style.fill = color;
                             }
-                        });
-                    }
-                });
-                observer.observe(mapContainer, { childList: true, subtree: true });
+                            cIdx++;
+                        }
+                    });
+                    return true;
+                };
+
+                // Kiểm tra ngay lập tức hoặc đợi nếu chưa vẽ xong
+                if (!applyMapStyles()) {
+                    const observer = new MutationObserver(() => {
+                        if (applyMapStyles()) observer.disconnect();
+                    });
+                    observer.observe(mapContainer, { childList: true, subtree: true });
+                }
             });
     }
 

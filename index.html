@@ -260,7 +260,19 @@
 
             yearFilter.addEventListener('change', (e) => renderTimeline(e.target.value));
             renderTimeline();
+
+            // --- TẮT MÀN HÌNH CHỜ ---
+            const hideLoading = () => {
+                const loadingScreen = document.getElementById('loading-screen');
+                if (loadingScreen) {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => loadingScreen.style.display = 'none', 1000);
+                }
+            };
+            // Tắt sau khi nạp xong hoặc sau 2 giây đề phòng lỗi mạng
+            setTimeout(hideLoading, 2000);
         });
+
     </script>
     <script type="module" src="script.js"></script>
 </body>
